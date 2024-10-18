@@ -1,7 +1,18 @@
 package com.crm.backend.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class User {
     @Id
@@ -10,11 +21,7 @@ public class User {
 
     private String email;
     private String password;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")  // Foreign key pointing to the Role entity
-    private Role role;
-
-    // Getters and Setters
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> role = new ArrayList<>();
 }
 
