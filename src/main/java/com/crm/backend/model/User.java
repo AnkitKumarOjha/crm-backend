@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -21,7 +23,10 @@ public class User {
 
     private String email;
     private String password;
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> role = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)  // Use enum for roles
+    private Role role;
 }
+
+
 

@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
@@ -30,28 +30,22 @@ public class CustomUserDetailService implements UserDetailsService {
 
         System.out.println("User found: " + user.getEmail());
         System.out.println("Stored password (hashed): " + user.getPassword());
-        System.out.println("Roles: " + user.getRole());
+        System.out.println("Role: " + user.getRole()); // This will now print a single role
 
-
-//        PasswordEncoder encoder = new BCryptPasswordEncoder();
-//        user.setPassword(encoder.encode("password123"));
-//        userRepository.save(user);
+//                PasswordEncoder encoder = new BCryptPasswordEncoder();
+//                user.setPassword(encoder.encode("password456"));
+//                userRepository.save(user);
 
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                getAuthorities(user)
+                getAuthorities(user) // Call the method to get authorities
         );
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        return user.getRole().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))  // Ensure the role prefix is correct
-                .collect(Collectors.toList());
+        // Since role is now a single enum, we need to convert it to GrantedAuthority
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
     }
-
-
-
-
 }
