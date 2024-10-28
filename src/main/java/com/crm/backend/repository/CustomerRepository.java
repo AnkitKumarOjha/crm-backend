@@ -34,8 +34,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "WHERE c.createdBy.id = :salesRepId")
     List<CustomerListDto> findCustomersBySalesRepsId(@Param("salesRepId") Long salesRepId);
 
+    @Query("SELECT COUNT(c) FROM Customer c WHERE c.createdBy.id= :salesRepId AND c.customerType = 'CONVERTED'")
+    long getTotalNoCustomer(@Param("salesRepId") long salesRepId);
 
-    Customer findCustomerById(Long id);
+    @Query("SELECT COUNT(c) FROM Customer c WHERE c.createdBy.id = :salesRepId AND c.customerType = 'LEAD'")
+    long getTotalNoLead(@Param("salesRepId") long salesRepId);
+
+
 }
+
 
 
