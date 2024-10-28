@@ -23,8 +23,9 @@ public class User {
 
     private String email;
     private String password;
+    private String name;
 
-    @Enumerated(EnumType.STRING)  // Use enum for roles
+    @Enumerated(EnumType.STRING)
     private Role role;
 }
 
