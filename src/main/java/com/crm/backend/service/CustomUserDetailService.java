@@ -30,10 +30,10 @@ public class CustomUserDetailService implements UserDetailsService {
 
         System.out.println("User found: " + user.getEmail());
         System.out.println("Stored password (hashed): " + user.getPassword());
-        System.out.println("Role: " + user.getRole()); // This will now print a single role
+        System.out.println("Role: " + user.getRole());
 
 //                PasswordEncoder encoder = new BCryptPasswordEncoder();
-//                user.setPassword(encoder.encode("password456"));
+//                user.setPassword(encoder.encode("password"));
 //                userRepository.save(user);
 
 

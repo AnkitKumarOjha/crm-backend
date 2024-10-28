@@ -2,11 +2,12 @@ package com.crm.backend.security;
 
 
 
+import org.springframework.context.annotation.Bean;
+
 import com.crm.backend.security.jwt.AuthEntryPointJwt;
 import com.crm.backend.security.jwt.AuthTokenFilter;
 import com.crm.backend.service.CustomUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -20,8 +21,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 
 @Configuration
@@ -45,7 +50,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorizeRequests ->
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests.requestMatchers("/login").permitAll()
                         .anyRequest().authenticated());
         http.sessionManagement(
@@ -66,31 +72,21 @@ public class SecurityConfig {
 
         return http.build();
     }
-//
-//    @Bean
-//    public UserDetailsService userDetailsService(DataSource dataSource) {
-//        return new JdbcUserDetailsManager(dataSource);
-//    }
 
-//    @Bean
-//    public CommandLineRunner initData(UserDetailsService userDetailsService) {
-//        return args -> {
-//            JdbcUserDetailsManager manager = (JdbcUserDetailsManager) userDetailsService;
-//            UserDetails salesdemo = User.withUsername("sales@gmail.com")
-//                    .password(passwordEncoder().encode("password"))
-//                    .roles("SALES_REP")
-//                    .build();
-//            UserDetails admindemo = User.withUsername("admin@gmail.com")
-//                    //.password(passwordEncoder().encode("adminPass"))
-//                    .password(passwordEncoder().encode("password"))
-//                    .roles("ADMIN")
-//                    .build();
-//
-//            JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-//            userDetailsManager.createUser(salesdemo);
-//            userDetailsManager.createUser(admindemo);
-//        };
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Frontend URL
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setAllowCredentials(true); // Allows cookies, Authorization header, etc.
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Apply CORS config to all endpoints
+
+        return source;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder(){

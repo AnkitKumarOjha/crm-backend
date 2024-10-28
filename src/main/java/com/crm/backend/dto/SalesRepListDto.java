@@ -5,19 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
-
-    private String email;
-    private List<String> roles;
-    private String token;
-
-
+public class SalesRepListDto {
+    private long id;
+    private String name;
+    private long sales;
+    private long customersManaged;
 }
-
-
