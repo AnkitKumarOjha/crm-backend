@@ -51,9 +51,10 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests.requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated());
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests.requestMatchers("/login").permitAll()
+                                .requestMatchers("/createCustomer").hasRole("SALES_REP")
+                                .anyRequest().authenticated());
         http.sessionManagement(
                 session ->
                         session.sessionCreationPolicy(
