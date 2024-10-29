@@ -1,14 +1,13 @@
 package com.crm.backend.service;
 
-import com.crm.backend.dto.CustomerListDto;
-import com.crm.backend.dto.SalesRepDetailsDto;
-import com.crm.backend.dto.SalesRepListDto;
-import com.crm.backend.dto.SalesRepPerformanceDto;
+import com.crm.backend.dto.*;
 import com.crm.backend.model.Customer;
 import com.crm.backend.model.Role;
 import com.crm.backend.model.User;
 import com.crm.backend.repository.CustomerRepository;
 import com.crm.backend.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -75,5 +74,44 @@ public class AdminDashboardService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         return userRepository.save(user);
+    }
+    @Transactional
+    public User updateUser(Long userId, @Valid UserUpdateRequestDto request) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
+        // Update the user's details
+        existingUser.setName(request.getName());
+        existingUser.setEmail(request.getEmail());
+
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+
+        existingUser.setRole(request.getRole());
+
+        // Save the updated user back to the database
+        return userRepository.save(existingUser);
+
+    }
+    @Transactional
+    public void deleteUser(Long userId) {
+        User user=userRepository.findById(userId).get();
+        customerRepository.deleteByCreatedBy(user);
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+        } else {
+            throw new RuntimeException("User not found with id: " + userId);
+        }
+    }
+
+    public SalesRepDetailsDto getSalesRepDetailsByEmail(@Valid String email) {
+        SalesRepDetailsDto salesRepDetails = userRepository.findSalesRepDetailsByEmail(email);
+
+        List<CustomerListDto> customers = customerRepository.findCustomersBySalesRepsId(salesRepDetails.getId());
+
+        salesRepDetails.setCustomers(customers);
+
+        return salesRepDetails;
     }
 }

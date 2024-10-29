@@ -5,18 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
-    private String email;
-    private List<String> roles;
-    private String token;
+public class CreateContactRequestDto {
 
+    private String title;
 
+    private String notes;
+
+    private int date;
 }
-
-

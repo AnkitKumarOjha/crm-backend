@@ -3,6 +3,7 @@ package com.crm.backend.controller;
 import com.crm.backend.dto.SalesRepDetailsDto;
 import com.crm.backend.dto.SalesRepListDto;
 import com.crm.backend.dto.SalesRepPerformanceDto;
+import com.crm.backend.dto.UserUpdateRequestDto;
 import com.crm.backend.model.User;
 import com.crm.backend.service.AdminDashboardService;
 import jakarta.validation.Valid;
@@ -50,6 +51,12 @@ public class AdminDashboardController {
         return adminDashboardService.getSalesRepDetails(id);
     }
 
+    @GetMapping("/sales")
+    public SalesRepDetailsDto getSalesRepDetailsByEmail(@RequestParam String email) {
+        return adminDashboardService.getSalesRepDetailsByEmail(email);
+    }
+
+
     @PostMapping("/create-user")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         try {
@@ -59,7 +66,17 @@ public class AdminDashboardController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
+    @PutMapping("/update-user/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequestDto request) {
+        User updatedUser = adminDashboardService.updateUser(id, request);
+        return ResponseEntity.ok(updatedUser);
+    }
 
+    @DeleteMapping("/delete-user/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        adminDashboardService.deleteUser(userId);
+        return ResponseEntity.ok("User deleted successfully");
+    }
 
 
 }
