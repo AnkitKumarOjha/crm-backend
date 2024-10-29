@@ -1,22 +1,19 @@
 package com.crm.backend.dto;
 
+import com.crm.backend.model.CustomerType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginResponse {
+public class EditCustomerRequestDto {
+    private String name;
     private String email;
-    private List<String> roles;
-    private String token;
-
+    private String phoneNumber;
+    private CustomerType customerType;
 
 }
-
-

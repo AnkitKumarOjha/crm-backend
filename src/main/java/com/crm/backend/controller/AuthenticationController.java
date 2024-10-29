@@ -30,16 +30,16 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PreAuthorize("hasRole('SALES_REP')")
-    @GetMapping("/sales")
-    public String userEndpoint(){
-        return "Hello, SALES REP!";
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public String adminEndpoint(){
-        return "Hello, Admin!";
-    }
+//    @PreAuthorize("hasRole('SALES_REP')")
+//    @GetMapping("/sales")
+//    public String userEndpoint(){
+//        return "Hello, SALES REP!";
+//    }
+//
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public String adminEndpoint(){
+//        return "Hello, Admin!";
+//    }
 
 
     @PostMapping("/login")

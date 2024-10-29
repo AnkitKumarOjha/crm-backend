@@ -1,22 +1,18 @@
 package com.crm.backend.dto;
 
+import com.crm.backend.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Setter
 @Getter
-@NoArgsConstructor
+@Setter
 @AllArgsConstructor
-public class LoginResponse {
+@NoArgsConstructor
+public class UserUpdateRequestDto {
+    private String name;
     private String email;
-    private List<String> roles;
-    private String token;
-
-
+    private String password;
+    private Role role;
 }
-
-
