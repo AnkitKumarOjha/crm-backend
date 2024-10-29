@@ -8,8 +8,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
+
+    Optional<Customer> findById(Long id);
 
     @Query("SELECT c.createdBy.name, COUNT(c) as totalSales " +
             "FROM Customer c " +
@@ -34,8 +37,14 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
             "WHERE c.createdBy.id = :salesRepId")
     List<CustomerListDto> findCustomersBySalesRepsId(@Param("salesRepId") Long salesRepId);
 
+    @Query("SELECT COUNT(c) FROM Customer c WHERE c.createdBy.id= :salesRepId AND c.customerType = 'CONVERTED'")
+    long getTotalNoCustomer(@Param("salesRepId") long salesRepId);
 
-    Customer findCustomerById(Long id);
+    @Query("SELECT COUNT(c) FROM Customer c WHERE c.createdBy.id = :salesRepId AND c.customerType = 'LEAD'")
+    long getTotalNoLead(@Param("salesRepId") long salesRepId);
+
+
 }
+
 
 
