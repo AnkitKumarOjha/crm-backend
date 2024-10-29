@@ -8,6 +8,9 @@ import com.crm.backend.model.User;
 import com.crm.backend.service.AdminDashboardService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,16 +39,37 @@ public class AdminDashboardController {
         return adminDashboardService.getTotalSales();
     }
 
+//    @GetMapping("/total-sales-reps")
+//    public List<User> getTotalSalesReps() {
+//        return adminDashboardService.getTotalSalesReps();
+//    }
+
     @GetMapping("/total-sales-reps")
-    public List<User> getTotalSalesReps() {
-        return adminDashboardService.getTotalSalesReps();
+    public Page<User> getTotalSalesReps(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return adminDashboardService.getTotalSalesReps(pageable);
     }
 
+//    @GetMapping("/sales-rep-list")
+//    public ResponseEntity<List<SalesRepListDto>> getSalesRepList() {
+//        List<SalesRepListDto> salesRepList = adminDashboardService.getSalesRepList();
+//        return new ResponseEntity<>(salesRepList, HttpStatus.OK);
+//    }
+
     @GetMapping("/sales-rep-list")
-    public ResponseEntity<List<SalesRepListDto>> getSalesRepList() {
-        List<SalesRepListDto> salesRepList = adminDashboardService.getSalesRepList();
-        return new ResponseEntity<>(salesRepList, HttpStatus.OK);
+    public ResponseEntity<Page<SalesRepListDto>> getSalesRepList(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<SalesRepListDto> salesRepList = adminDashboardService.getSalesRepList(pageable);
+        return ResponseEntity.ok(salesRepList);
     }
+
+
     @GetMapping("/sales-reps/{id}")
     public SalesRepDetailsDto getSalesRepDetails(@PathVariable Long id) {
         return adminDashboardService.getSalesRepDetails(id);

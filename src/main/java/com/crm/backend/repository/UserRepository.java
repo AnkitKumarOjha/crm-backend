@@ -5,6 +5,8 @@ import com.crm.backend.dto.SalesRepListDto;
 import com.crm.backend.model.Customer;
 import com.crm.backend.model.Role;
 import com.crm.backend.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,14 +17,16 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 //    User findByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.role = :role")
-    List<User> findByRole(@Param("role") Role role);
+//    @Query("SELECT u FROM User u WHERE u.role = :role")
+//    List<User> findByRole(@Param("role") Role role);
+
+    Page<User> findByRole(Role role, Pageable pageable);
 
     @Query("SELECT new com.crm.backend.dto.SalesRepListDto(u.id, u.name, " +
             "(SELECT COUNT(c) FROM Customer c WHERE c.createdBy = u AND c.customerType = 'CONVERTED'), " +
             "(SELECT COUNT(c) FROM Customer c WHERE c.createdBy = u)) " +
             "FROM User u WHERE u.role = 'SALES_REP'")
-    List<SalesRepListDto> findSalesRepList();
+    Page<SalesRepListDto> findSalesRepList(Pageable pageable);
 
 
     @Query("SELECT new com.crm.backend.dto.SalesRepDetailsDto(u.id, u.name, u.email, "

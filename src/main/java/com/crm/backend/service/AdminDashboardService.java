@@ -10,6 +10,8 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -47,12 +49,21 @@ public class AdminDashboardService {
         return customerRepository.getTotalSales();
     }
 
-    public List<User> getTotalSalesReps() {
-        return userRepository.findByRole(Role.SALES_REP);
+//    public List<User> getTotalSalesReps() {
+//        return userRepository.findByRole(Role.SALES_REP);
+//    }
+
+    public Page<User> getTotalSalesReps(Pageable pageable) {
+        return userRepository.findByRole(Role.SALES_REP, pageable);
     }
 
-    public List<SalesRepListDto> getSalesRepList() {
-        return userRepository.findSalesRepList();
+//    public List<SalesRepListDto> getSalesRepList() {
+//        return userRepository.findSalesRepList();
+//    }
+
+
+    public Page<SalesRepListDto> getSalesRepList(Pageable pageable) {
+        return userRepository.findSalesRepList(pageable);
     }
 
     public SalesRepDetailsDto getSalesRepDetails(Long id) {
