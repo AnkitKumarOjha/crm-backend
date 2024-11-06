@@ -106,6 +106,10 @@ public class AdminDashboardService {
     }
 
     public SalesRepDetailsDto getSalesRepDetailsByEmail(@Valid String email) {
+        User user = userRepository.findByEmail(email).get();
+        if(user.getRole()==Role.ADMIN){
+            return new SalesRepDetailsDto(user.getId(), user.getName(), user.getEmail(), 0,0);
+        }
         SalesRepDetailsDto salesRepDetails = userRepository.findSalesRepDetailsByEmail(email);
 
         List<CustomerListDto> customers = customerRepository.findCustomersBySalesRepsId(salesRepDetails.getId());
@@ -113,5 +117,26 @@ public class AdminDashboardService {
         salesRepDetails.setCustomers(customers);
 
         return salesRepDetails;
+    }
+    @Transactional
+    public User updateProfile(Long id, @Valid UpdateProfileRequestDto request) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+//        if (userRepository.existsByEmail(request.getEmail())) {
+//            throw new IllegalArgumentException("User with email already exists");
+//        }
+
+        existingUser.setName(request.getName());
+        existingUser.setEmail(request.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        return userRepository.save(existingUser);
+    }
+
+    public UserProfileDto getUser(Long id) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        return new UserProfileDto(existingUser.getName(), existingUser.getEmail(),existingUser.getRole() );
     }
 }

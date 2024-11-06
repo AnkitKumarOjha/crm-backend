@@ -1,9 +1,6 @@
 package com.crm.backend.controller;
 
-import com.crm.backend.dto.SalesRepDetailsDto;
-import com.crm.backend.dto.SalesRepListDto;
-import com.crm.backend.dto.SalesRepPerformanceDto;
-import com.crm.backend.dto.UserUpdateRequestDto;
+import com.crm.backend.dto.*;
 import com.crm.backend.model.User;
 import com.crm.backend.service.AdminDashboardService;
 import jakarta.validation.Valid;
@@ -51,7 +48,11 @@ public class AdminDashboardController {
         return adminDashboardService.getSalesRepDetails(id);
     }
 
-    @GetMapping("/sales")
+    @GetMapping("/user/{id}")
+    public UserProfileDto getUser(@PathVariable Long id) {
+        return adminDashboardService.getUser(id);
+    }
+    @GetMapping("/{id}")
     public SalesRepDetailsDto getSalesRepDetailsByEmail(@RequestParam String email) {
         return adminDashboardService.getSalesRepDetailsByEmail(email);
     }
@@ -69,6 +70,11 @@ public class AdminDashboardController {
     @PutMapping("/update-user/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequestDto request) {
         User updatedUser = adminDashboardService.updateUser(id, request);
+        return ResponseEntity.ok(updatedUser);
+    }
+    @PutMapping("/update-profile/{id}")
+    public ResponseEntity<User> updateProfile(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequestDto request) {
+        User updatedUser = adminDashboardService.updateProfile(id, request);
         return ResponseEntity.ok(updatedUser);
     }
 
