@@ -21,11 +21,15 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
     public Customer getCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
     }
 
     public Customer createCustomer(CreateCustomerRequestDto createCustomerRequestDto) {
+        if (customerRepository.existsByEmail(createCustomerRequestDto.getEmail())) {
+            throw new IllegalArgumentException("Customer with email already exists !");
+        }
         // Fetch the user who is creating the customer using their email
         User createdByUser = userRepository.findByEmail(createCustomerRequestDto.getCreatedBy())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));

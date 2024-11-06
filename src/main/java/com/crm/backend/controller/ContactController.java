@@ -22,6 +22,15 @@ public class ContactController {
         Contact createdContact = contactService.createContact(customerId, contactRequestDto);
         return ResponseEntity.ok(createdContact);
     }
+    @PutMapping("/{customerId}/edit-contact/{contactId}")
+    public ResponseEntity<Contact> editContact(@PathVariable Long customerId, @PathVariable Long contactId,@RequestBody CreateContactRequestDto contactRequestDto ){
+        try {
+            Contact contact=contactService.editContact(customerId, contactId,contactRequestDto);
+            return new ResponseEntity<>(contact,HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+        }
+    }
     @DeleteMapping("/{customerId}/delete-contact/{contactId}")
     public ResponseEntity<String> deleteContact(@PathVariable Long customerId, @PathVariable Long contactId) {
         try {

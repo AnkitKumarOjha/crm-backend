@@ -42,4 +42,18 @@ public class ContactService {
 
         contactRepository.delete(contact);
     }
+
+    public Contact editContact(Long customerId, Long contactId, CreateContactRequestDto contactRequestDto) {
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new RuntimeException("Customer not found with ID: " + customerId));
+        Contact prevContact = contactRepository.findById(contactId)
+                .orElseThrow(() -> new RuntimeException("Contact not found with ID: " + contactId));
+        prevContact.setTitle(contactRequestDto.getTitle());
+        prevContact.setDate(contactRequestDto.getDate());
+        prevContact.setNotes(contactRequestDto.getNotes());
+
+
+        contactRepository.save(prevContact);
+        return prevContact;
+    }
 }

@@ -39,6 +39,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Customer findCustomerById(Long id);
 
     void deleteByCreatedBy(User user);
+
+    boolean existsByEmail(String email);
 }
 
 
