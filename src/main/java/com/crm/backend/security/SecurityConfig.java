@@ -54,7 +54,7 @@ public class SecurityConfig {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests.requestMatchers("/login").permitAll()
-                        .requestMatchers("/swagger-ui/**","/swagger-ui/index.html", "/swagger-resources/**","/v3/api-docs","/v3/api-docs/**", "/webjars/**").permitAll()  // All Swagger-related paths are permitted
+                           .requestMatchers("/swagger-ui/**","/swagger-ui/index.html", "/swagger-resources/**","/v3/api-docs","/v3/api-docs/**", "/webjars/**").permitAll()  // All Swagger-related paths are permitted
                         .anyRequest().authenticated());
         http.sessionManagement(
                 session ->
@@ -80,7 +80,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000")); // Frontend URL
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://crm-by-rigtcoder.netlify.app")); // Frontend URL
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
